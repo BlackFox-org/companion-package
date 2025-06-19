@@ -63,6 +63,8 @@ public class OpenIPC
 
     public static string DeviceSettingsConfigPath { get; private set; }
 
+    public static string usrName = Environment.UserName;
+
     public static string GetBinariesPath()
     {
         string basePath;
@@ -75,10 +77,17 @@ public class OpenIPC
             return Path.Combine(basePath, "binaries");
         }
 
-        if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux())
+        if (OperatingSystem.IsWindows())
         {
             // Windows and Linux: binaries are alongside the app
             basePath = AppContext.BaseDirectory;
+            return Path.Combine(basePath, "binaries");
+        }
+        
+        if (OperatingSystem.IsLinux())
+        {
+            // Linux: binaries are in ~/.local/share/companion
+            basePath = $"/home/{usrName}/.local/share/companion";
             return Path.Combine(basePath, "binaries");
         }
 
